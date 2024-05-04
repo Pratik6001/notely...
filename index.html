@@ -1,0 +1,150 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notely</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="script.js" defer></script>
+    <style>
+        .completed {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        /* CSS styles for the empty state */
+        #emptyState {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        #emptyStateText {
+            font-size: 18px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <header class="flex justify-center w-full items-center bg-white py-2  px-28 mb-4 space-x-4 fixed top-0">
+        <div class="flex items-center pl-6 w-full bg-gray-100 rounded-lg">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput"
+                class=" w-full border-none bg-gray-100 rounded-lg py-2 px-4 focus:outline-none" placeholder="Search">
+        </div>
+        <div class=" w-36">
+            <button id="addButton"
+                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full">
+                + Add
+            </button>
+        </div>
+    </header>
+    <main class="container mx-auto py-4 mt-12">
+        <h1 class="font-bold text-2xl mt-4">Your Notes</h1>
+        <section>
+            <div class="flex items-center justify-between  my-4">
+                <div>
+                    <button id="allButton"
+                        class=" hover:bg-gray-200 text-gray-800 border-b font-semibold py-2 px-4 focus:border-b-purple-600 hover:border-b-purple-600  focus:outline-none">
+                        ALL
+                    </button>
+                    <button id="personalButton"
+                        class=" hover:bg-gray-200 text-gray-800 border-b font-semibold py-2 px-4 focus:border-b-purple-600 hover:border-b-purple-600 active:border-b-purple-400 focus:outline-none  ">
+                        PERSONAL
+                    </button>
+                    <button id="homeButton"
+                        class=" hover:bg-gray-200 text-gray-800 border-b font-semibold py-2 px-4 focus:border-b-purple-600 hover:border-b-purple-600 focus:outline-none">
+                        HOME
+                    </button>
+                    <button id="businessButton"
+                        class=" hover:bg-gray-200 text-gray-800 border-b font-semibold py-2 px-4 focus:border-b-purple-600 hover:border-b-purple-600 focus:outline-none">
+                        BUSINESS
+                    </button>
+                </div>
+                <div class="flex items-center mb-4">
+                    <input type="checkbox" class="mr-2" id="completedOnly">
+                    <label for="completedOnly" class="text-gray-700 font-semibold">Show only completed notes</label>
+                </div>
+            </div>
+
+            <div id="noteContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Notes will be dynamically added here -->
+            </div>
+            <div id="emptyState" class="hidden text-center flex flex-col items-center">
+                <img src="https://cdn-icons-png.flaticon.com/128/13637/13637411.png" alt="Empty State Illustration">
+                <p id="emptyStateText">No notes found.</p>
+            </div>
+        </section>
+
+        <!-- Modal for adding/editing notes -->
+        <div id="noteModal" class="fixed backdrop-blur-sm  z-10 inset-0 overflow-y-auto hidden">
+            <div class="flex items-center justify-center min-h-screen">
+                <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+                    <h2 id="modalTitle" class="text-lg font-semibold mb-4">Add Note</h2>
+                    <form id="noteForm">
+                        <div class="flex justify-between gap-2">
+                            <div class="w-1/2">
+                                <label for="title" class="block text-gray-700 font-semibold mb-1">Title</label>
+                                <input type="text" id="title"
+                                    class="w-full bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    required placeholder="Add title">
+                            </div>
+                            <div class="w-1/2">
+                                <label for="category" class="block text-gray-700 font-semibold mb-1">Category</label>
+                                <select id="category"
+                                    class="w-full bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                    <option value="Personal">Personal</option>
+                                    <option value="Business">Business</option>
+                                    <option value="Home">Home</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="description" class="block text-gray-700 font-semibold mb-2">Description</label>
+                            <textarea id="description"
+                                class="w-full bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                rows="3" maxlength="200"></textarea>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="button" id="cancelButton"
+                                class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-full mr-2">
+                                Cancel
+                            </button>
+                            <button type="submit" id="saveButton"
+                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full">
+                                Add
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for confirming note deletion -->
+        <div id="deleteModal" class="fixed backdrop-blur-md z-10 inset-0 overflow-y-auto hidden">
+            <div class="flex items-center justify-center min-h-screen">
+                <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+                    <h2 class="text-lg font-semibold mb-4">Confirm Deletion</h2>
+                    <p id="deleteConfirmation" class="text-gray-700 mb-4">Are you sure you want to delete this note?</p>
+                    <div class="flex justify-end">
+                        <button type="button" id="cancelDeleteButton"
+                            class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg mr-2">
+                            Cancel
+                        </button>
+                        <button type="button" id="confirmDeleteButton"
+                            class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <bds />
+</body>
+
+</html>
